@@ -11,11 +11,16 @@ Configuring Authentication
 
 You need to configure Azure AD to make this application work. 
 
-XXX
-
-Copy the Client Id into program.cs.
-
-With the Client Secret, make sure you copy it out of Azure into a safe place before closing the browser window. It can only be copied once out of Azure. After that, you need to generate a new one.
+1. Create a Microsoft developer account. 
+2. Go to https://entra.microsoft.com/
+3. Click on "Applications" / "App Registrations"
+4. Create a new application registration. 
+  * "Accounts in any organizational directory"
+  * Click "Register"
+5. Copy the "Application (client) ID" into your user secrets as "ClientId".
+6. Create a new "web" redirect URI to "https://localhost:3000/signin-oidc"
+0. Set the front-channel logout URL to "http://localhost:44321/signout-oidc"
+7. Create a new client secret. Make sure you copy it out of Azure into a safe place immediately. It can only be copied once out of Azure. After that, you need to generate a new one.
 
 Add the client secret to your user secrets under "ClientSecret". You can do this by right-clicking on the "webapi" project, selecting "Manage User Secrets" and adding it to the JSON, or with the following command from the `webapi` directory::
 

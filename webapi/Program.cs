@@ -31,7 +31,7 @@ builder.Services.AddAuthentication(options => {
     .AddJwtBearer() // only used for Challenge.
     // OpenIdConnect is used for the /login page. 
     .AddOpenIdConnect(options => {
-        options.ClientId = "<enter your client id>";
+        options.ClientId = builder.Configuration["ClientId"];
         options.ClientSecret = builder.Configuration["ClientSecret"];
         options.Authority = "https://login.microsoftonline.com/common";
         options.CallbackPath = "/signin-oidc";
