@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,10 @@ var initialScopes = builder.Configuration.GetValue<string>("DownstreamApi:Scopes
   cookie. We don't use JWT tokens because they're less secure than a httponly secure cookie.
 */
 
+// TODO: redirect handling back to a page. Use React router.
+// TODO: /api, and versioning.
+// TODO: Is PKCE used?
+// TODO: Check the cookie's security.
 
 builder.Services.AddAuthentication(options => {
     // For authentication, we use cookies authentication.
@@ -78,16 +83,15 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGet("/login", async (ctx) =>
+app.MapGet("/login", async (HttpContext ctx, [FromQuery] string? returnTo) =>
 {
     // Redirect the user to the OpenId provider's login page.
     await ctx.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, 
         new AuthenticationProperties()
         {
             // When they get back, don't go to /login. 
-            // TODO: maintain a redirect URL properly.
-            RedirectUri = "/"
-        });
+            RedirectUri = returnTo ?? "/"
+        });;
 }).AllowAnonymous();
 
 app.MapGet("/logout", async (ctx) =>
@@ -101,9 +105,9 @@ app.MapGet("/logout", async (ctx) =>
 });
 
 // This API request is not protected. Anybody can access it.
-app.MapGet("/wideopen", () => { return Results.Ok("foo"); });
+app.MapGet("/api/open", () => { return Results.Ok("<This is the API response from /api/open.>"); });
 
 // This API requires that the user logs in first.
-app.MapGet("/protected", () => { return Results.Ok("bar"); }).RequireAuthorization("protectedPolicy");
+app.MapGet("/api/protected", () => { return Results.Ok("<This is the API response from /api/protected.>"); }).RequireAuthorization("protectedPolicy");
 
 app.Run();

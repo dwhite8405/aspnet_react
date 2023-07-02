@@ -1,10 +1,13 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
+// TODO: can we add "/api/*"?
 const context = [
-    "/hello",
-    "/weatherforecast",
+    "/api/WeatherForecast",
+    "/api/open",
+    "/api/protected",
     "/signin-oidc",
-    "/signout-oidc",
+    "/signout-oidc", // Is this used?
+    "/signout-callback-oidc",
     "/login",
     "/logout"
 ];

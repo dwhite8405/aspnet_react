@@ -1,87 +1,60 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
+import { BrowserRouter, Link, Route, Routes, useRouteError } from 'react-router-dom';
 import './App.css';
+import { FrontPage } from './components/FrontPage';
+import { Open } from './components/Open';
+import { Protected } from './components/Protected';
+import { WeatherForecast } from './components/WeatherForecast';
 
-interface TemperatureMeasurement {
-  date: string;
-  temperatureC : number;
-  temperatureF : number;
-  summary: string;
-}
 
 interface AppProps { }
 
 interface AppState {
-  forecasts : Array<TemperatureMeasurement>;
-  loading: boolean;
-  error: string|null;
-} 
+}
 
 export default class App extends Component<AppProps, AppState> {
-  static displayName = App.name;
+    static displayName = App.name;
 
-  constructor(props: Readonly<AppProps>) {
-      super(props);
-      this.state = { forecasts: [], loading: true, error:null };
-  }
 
-  componentDidMount() {
-      this.populateWeatherData();
-  }
+    render() {
 
-  static renderForecastsTable(forecasts: Array<TemperatureMeasurement>) {
-      return (
-          <table className='table table-striped' aria-labelledby="tabelLabel">
-              <thead>
-                  <tr>
-                      <th>Date</th>
-                      <th>Temp. (C)</th>
-                      <th>Temp. (F)</th>
-                      <th>Summary</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  {forecasts.map(forecast =>
-                      <tr key={forecast.date}>
-                          <td>{forecast.date}</td>
-                          <td>{forecast.temperatureC}</td>
-                          <td>{forecast.temperatureF}</td>
-                          <td>{forecast.summary}</td>
-                      </tr>
-                  )}
-              </tbody>
-          </table>
-      );
-  }
+        return (
+            <React.StrictMode>
+                <BrowserRouter>
+                    <div>
+                        <Link to="/">Front Page</Link>&nbsp;
+                        <Link to="/WeatherForecast">Weather Forecast</Link>&nbsp;
+                        <Link to="/open">Open page</Link>&nbsp;
+                        <Link to="/protected">Protected page</Link>&nbsp;
+                        {/* The login and logout links always need to go to the back-end. */}
+                        <a href="/login">Login</a>&nbsp;
+                        <a href="/logout">Logout</a>
+                    </div>
+                    <div>
+                        <Routes >
+                            <Route path="/" element={<FrontPage />} errorElement={<ErrorHandler />} />
+                            <Route path="/WeatherForecast" element={<WeatherForecast />} />
+                            <Route path="/open" element={<Open />} />
+                            <Route path="/protected" element={<Protected />} />
+                            <Route path="*" element={<PageNotFound/> } />
+                        </Routes>
+                    </div>
+                </BrowserRouter>
+             </React.StrictMode>
+        );
+    }
+}
 
-  render() {
-      let contents = this.state.loading
-          ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-          : App.renderForecastsTable(this.state.forecasts);
+function ErrorHandler() {
+    let error = useRouteError();
+    console.error(error);
+    return <div>Error occurred. </div>;
+}
 
-      return (
-          <div>
-              <h1 id="tabelLabel" >Weather forecast</h1>
-              <p><a href="/login">Login</a></p>
-              <p><a href="/logout">Logout</a></p>
-              <p><a href="https://localhost:7170/swagger">OpenAPI definitions</a></p>
-              <p><a href="https://myaccount.microsoft.com/">https://myaccount.microsoft.com/</a></p>
-              <p>This component demonstrates fetching data from the server.</p>
-              {contents}
-              {this.state.error}
-          </div>
-      );
-  }
-
-  async populateWeatherData() {
-      const response = await fetch('weatherforecast');
-      if (response?.ok) {
-          const data = await response.json();
-          this.setState({ forecasts: data, loading: false });
-      } else {
-          this.setState({
-              loading: false,
-              error: "Try logging in."
-          });
-      }
-  }
+function PageNotFound() {
+    return (
+        <div>
+            <h1>Page not found</h1>
+        </div>
+    );
 }
