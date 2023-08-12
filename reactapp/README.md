@@ -8,11 +8,20 @@ In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Note - if you are using Linux, first edit package.json and change::
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+    "start": "set HTTPS=true&&react-scripts start"
+
+to::
+
+    "start": "HTTPS=true react-scripts start"
+
+Runs the app in the development mode.\
+Open [https://localhost:3000](https://localhost:3000) to view it in the browser.
+
+Make sure that you are using HTTPS. If you are not using HTTPS, you will see::
+
+    Error code: SSL_ERROR_RX_RECORD_TOO_LONG
 
 ### `npm test`
 

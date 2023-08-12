@@ -38,7 +38,7 @@ builder.Services.AddAuthentication(options => {
     .AddOpenIdConnect(options => {
         options.ClientId = builder.Configuration["ClientId"];
         options.ClientSecret = builder.Configuration["ClientSecret"];
-        options.Authority = "https://login.microsoftonline.com/common";
+        options.Authority = "https://login.microsoftonline.com/common/v2.0";
         options.CallbackPath = "/signin-oidc";
         options.ResponseType = "code";
         options.Scope.Add("openid");

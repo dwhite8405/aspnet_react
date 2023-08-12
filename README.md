@@ -11,7 +11,7 @@ Configuring Authentication
 
 You need to configure Azure AD to make this application work. 
 
-1. Create a Microsoft developer account. 
+1. Create a (free) Microsoft Azure account, from https://azure.microsoft.com/en-us/free/active-directory.
 2. Go to https://entra.microsoft.com/
 3. Click on "Applications" / "App Registrations"
 4. Create a new application registration. 
@@ -25,6 +25,10 @@ You need to configure Azure AD to make this application work.
 Add the client secret to your user secrets under "ClientSecret". You can do this by right-clicking on the "webapi" project, selecting "Manage User Secrets" and adding it to the JSON, or with the following command from the `webapi` directory::
 
     C:\stuff\source\repos\aspnet_react\webapi> dotnet user-secrets set ClientApi "s3cr3t"
+
+If you get error AADSTS50020 with a misleading error message, it means that you created the application registration with a "personal" Microsoft account rather than from an Azure
+developer account. You don't need to pay, but you do need to log in to https://entra.microsoft.com/ using a developer account.
+
 
 Running
 -------
