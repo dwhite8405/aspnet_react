@@ -32,6 +32,7 @@ builder.Services.AddAuthentication(options => {
         // If the user attempts to use an API without being authenticated, they get a 401 (unauthorized)
         // rather than a 302 (redirect to login).
         b.ForwardChallenge = JwtBearerDefaults.AuthenticationScheme;
+        b.ForwardForbid = JwtBearerDefaults.AuthenticationScheme;
     })
     .AddJwtBearer() // only used for Challenge.
     // OpenIdConnect is used for the /login page. 
